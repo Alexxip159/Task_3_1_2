@@ -11,17 +11,24 @@
     <div>Edit User</div>
     <br/>
 
-    <form th:method="PATCH" th:action="@{/{id}(id=${user.getId()})}" th:object="${user}">
-
+    <form th:method="PATCH" th:action="@{/admin/userid_{id}(id=${user.getId()})}" th:object="${user}">
+      <div th:text="|ID:  ${user.getId()}|"></div>
+      <br/>
+      <label for="username">Username</label>
+      <input type="text" th:field="*{username}" id="username"/>
+      <br/>
+      <label for="password">Password</label>
+      <input type="text" th:field="*{password}" id="password"/>
+      <br/>
       <label for="firstname">First Name</label>
       <input type="text" th:field="*{firstName}" id="firstname"/>
-
+      <br/>
       <label for="lastname">Last Name</label>
       <input type="text" th:field="*{lastName}" id="lastname"/>
-
+      <br/>
       <label for="age">Age</label>
       <input type="text" th:field="*{age}" id="age"/>
-
+      <br/>
       <label for="email">Email</label>
       <input type="text" th:field="*{email}" id="email"/>
 
@@ -31,12 +38,18 @@
 
       <br/>
 
+      <div style="color: red" th:if="${#fields.hasErrors('username')}" th:errors="*{username}"></div>
+      <div style="color: red" th:if="${#fields.hasErrors('password')}" th:errors="*{password}"></div>
       <div style="color: red" th:if="${#fields.hasErrors('firstName')}" th:errors="*{firstName}"></div>
       <div style="color: red" th:if="${#fields.hasErrors('lastName')}" th:errors="*{lastName}"></div>
       <div style="color: red" th:if="${#fields.hasErrors('age')}" th:errors="*{age}"></div>
       <div style="color: red" th:if="${#fields.hasErrors('email')}" th:errors="*{email}"></div>
 
     </form>
+
+    <br/>
+
+    <a href="/logout">LOGOUT</a>
 
   </body>
 
