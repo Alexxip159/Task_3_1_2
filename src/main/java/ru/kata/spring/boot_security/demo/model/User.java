@@ -30,7 +30,7 @@ public class User implements UserDetails {
     @Size(min = 4, max = 200, message = "Field \"password\" should be between 4 and 20 characters")
     @Column(name = "password")
     private String password = "";
-    @ManyToMany(fetch = FetchType.EAGER)
+    @ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.DETACH}, fetch = FetchType.EAGER)
     @JoinTable(name = "users_roles",
             joinColumns = @JoinColumn(name = "user_id", referencedColumnName = "id"),
             inverseJoinColumns = @JoinColumn(name = "roles_id", referencedColumnName = "id"))
@@ -46,6 +46,9 @@ public class User implements UserDetails {
     @Email(message = "Email is not valid")
     @Column(name = "email")
     private String email = "";
+    @Transient
+//    @NotEmpty
+    private String rolesStr;
 
     public User() {
     }
@@ -66,22 +69,22 @@ public class User implements UserDetails {
 
     @Override
     public boolean isAccountNonExpired() {
-        return false;
+        return true;
     }
 
     @Override
     public boolean isAccountNonLocked() {
-        return false;
+        return true;
     }
 
     @Override
     public boolean isCredentialsNonExpired() {
-        return false;
+        return true;
     }
 
     @Override
     public boolean isEnabled() {
-        return false;
+        return true;
     }
 
     @Override

@@ -31,15 +31,6 @@ public class UserController {
         return "user";
     }
 
-    @PostMapping()
-    public String createUser(@ModelAttribute("user") @Valid User user, BindingResult bindingResult) {
-        if (bindingResult.hasErrors())
-            return "add";
-
-        userService.CreateUser(user);
-        return "redirect:/admin";
-    }
-
     private boolean isAdmin(Principal principal) {
         return customDetailsService.loadUserByUsername(principal.getName()).getAuthorities()
                 .stream().map(role -> role.getAuthority()).collect(Collectors.toList()).contains("ROLE_ADMIN");

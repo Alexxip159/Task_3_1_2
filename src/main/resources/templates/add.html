@@ -11,9 +11,9 @@
         <div>Add User</div>
         <br/>
 
-        <form th:method="POST" th:action="@{/user}" th:object="${user}">
+        <form th:method="POST" th:action="@{/admin}" th:object="${user}">
 
-            <label for="username">Userame</label>
+            <label for="username">Username</label>
             <input type="text" th:field="*{username}" id="username"/>
             <br/>
             <label for="password">Password</label>
@@ -30,6 +30,9 @@
             <br/>
             <label for="email">Email</label>
             <input type="text" th:field="*{email}" id="email"/>
+            <br/>
+            <label for="roles">Roles</label>
+            <input type="text" th:field="*{rolesStr}" id="roles"/>
 
             <br/>
 

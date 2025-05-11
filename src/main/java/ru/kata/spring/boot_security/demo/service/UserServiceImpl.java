@@ -13,6 +13,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -76,6 +77,10 @@ public class UserServiceImpl implements UserService {
             localUser.setAge(user.getAge());
             localUser.setEmail(user.getEmail());
             localUser.setRoles(user.getRoles());
+            localUser.setRolesStr(user.getRoles().stream()
+                    .map(Role::getName)
+                    .map(roleName -> roleName.substring(5))
+                    .collect(Collectors.joining(", ")));
         }
         return localUser;
     }
@@ -87,6 +92,7 @@ public class UserServiceImpl implements UserService {
         userDb.setLastName(localUser.getLastName());
         userDb.setAge(localUser.getAge());
         userDb.setEmail(localUser.getEmail());
+        userDb.setRoles(localUser.getRoles());
         userDb.setPassword(bCryptPasswordEncoder.encode(localUser.getPassword()));
         return userDb;
     }
