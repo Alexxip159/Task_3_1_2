@@ -1,7 +1,6 @@
 package ru.kata.spring.boot_security.demo.service;
 
-import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -12,20 +11,18 @@ import ru.kata.spring.boot_security.demo.repository.UserRepository;
 
 import java.util.HashSet;
 import java.util.List;
+import java.util.Optional;
 import java.util.Set;
 
 @Service
+@RequiredArgsConstructor
 public class UserServiceImpl implements UserService {
     private final UserRepository userRepository;
     private final RoleRepository roleRepository;
     private final BCryptPasswordEncoder bCryptPasswordEncoder;
     private User userDb = new User();
 
-    public UserServiceImpl(UserRepository userRepository, RoleRepository roleRepository, BCryptPasswordEncoder bCryptPasswordEncoder) {
-        this.userRepository = userRepository;
-        this.roleRepository = roleRepository;
-        this.bCryptPasswordEncoder = bCryptPasswordEncoder;
-    }
+
 
     @Override
     @Transactional(readOnly = true)
@@ -36,13 +33,13 @@ public class UserServiceImpl implements UserService {
     @Override
     @Transactional(readOnly = true)
     public User findUserById(Long id) {
-        userDb = userRepository.findById(id).orElse(null);
-        return loadUser(userDb);
+        Optional<User> optionalUser = userRepository.findById(id);
+        return optionalUser.map(this::loadUser).orElseGet(User::new);
     }
 
     @Override
     @Transactional
-    public boolean addUser(User localUser) {
+    public boolean CreateUser(User localUser) {
         if (userRepository.findByUsername(localUser.getUsername()) == null) {
             userDb = upLoadUser(localUser);
             if (localUser.getRoles() == null) {
@@ -68,19 +65,6 @@ public class UserServiceImpl implements UserService {
         userRepository.save(upLoadUser(localUser));
         userDb = new User();
     }
-
-    @Override
-    @Transactional(readOnly = true)
-    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        User user = userRepository.findByUsername(username);
-
-        if (user == null) {
-            throw new UsernameNotFoundException("User not found");
-        }
-
-        return user;
-    }
-
 
     private User loadUser(User user) {
         User localUser = new User();
